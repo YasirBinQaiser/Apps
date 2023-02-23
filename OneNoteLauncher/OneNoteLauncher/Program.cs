@@ -59,13 +59,7 @@ static string GetOneNoteRoot()
     }
 
 
-//string oneNoteURL = "onenote:///\"" + notebook.Section.path +
-//                                    "\"#\"" + notebook.Section.Page.name +
-//                                    "\"&section-id=" + notebook.Section.ID +
-//                                    "&page-id=" + notebook.Section.Page.ID +
-//                                    "&end";
 
-//exeProcess.StartInfo.Arguments = "/hyperlink " + oneNoteURL;
 
 static void LaunchOneNote(string filter)
     {
@@ -89,22 +83,25 @@ static void LaunchOneNote(string filter)
             Notebook notebook = xmlSerializer.Deserialize(reader) as Notebook;
             if (notebook.Section != null && notebook.Section.Page != null)
                 {
-                if (oneNoteApp.Windows == null)
-                    {
+                string oneNotePath = GetOneNoteRoot() + "OneNote.exe" ;
 
-                    string oneNotePath = GetOneNoteRoot() + "OneNote.exe" ;
+                if (string.IsNullOrEmpty(oneNotePath))
+                    return;
 
-                    if (string.IsNullOrEmpty(oneNotePath))
-                        return;
+                Process exeProcess = new Process();
+                exeProcess.StartInfo.FileName = oneNotePath;
+                exeProcess.StartInfo.UseShellExecute = false;
+                string oneNoteURL = "onenote:///\"" + notebook.Section.path +
+                                                    "\"#\"" + notebook.Section.Page.name +
+                                                    "\"&section-id=" + notebook.Section.ID +
+                                                    "&page-id=" + notebook.Section.Page.ID +
+                                                    "&end";
 
-                    Process exeProcess = new Process();
-                    exeProcess.StartInfo.FileName = oneNotePath;
-                    exeProcess.StartInfo.UseShellExecute = false;
-                    exeProcess.StartInfo.Arguments = "/nologo";
-                    exeProcess.Start();
-                    }
+                exeProcess.StartInfo.Arguments = "/hyperlink " + oneNoteURL;
+                exeProcess.Start();
 
-                oneNoteApp.NavigateTo (notebook.Section.ID, notebook.Section.Page.ID);
+
+                //oneNoteApp.NavigateTo (notebook.Section.ID, notebook.Section.Page.ID);
                 return;
                 }
             }
