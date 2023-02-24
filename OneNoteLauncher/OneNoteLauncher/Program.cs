@@ -24,6 +24,12 @@ static class Program
 static void Main(string[] args)
     {
     string strs = "";
+    //Find OneNote via Registry
+    string oneNoteRoot = GetOneNoteRoot();
+    if (string.IsNullOrEmpty (oneNoteRoot))
+        return;
+
+    //combine all arguments as one filter
     foreach (string str in args)
         strs = strs + " " + str;
     
@@ -53,8 +59,6 @@ static string GetOneNoteRoot()
 
             }
         }
-
-
     return rootFolder;
     }
 
@@ -83,25 +87,10 @@ static void LaunchOneNote(string filter)
             Notebook notebook = xmlSerializer.Deserialize(reader) as Notebook;
             if (notebook.Section != null && notebook.Section.Page != null)
                 {
-                string oneNotePath = GetOneNoteRoot() + "OneNote.exe" ;
-
-                if (string.IsNullOrEmpty(oneNotePath))
-                    return;
-
-                Process exeProcess = new Process();
-                exeProcess.StartInfo.FileName = oneNotePath;
-                exeProcess.StartInfo.UseShellExecute = false;
-                string oneNoteURL = "onenote:///\"" + notebook.Section.path +
-                                                    "\"#\"" + notebook.Section.Page.name +
-                                                    "\"&section-id=" + notebook.Section.ID +
-                                                    "&page-id=" + notebook.Section.Page.ID +
-                                                    "&end";
-
-                exeProcess.StartInfo.Arguments = "/hyperlink " + oneNoteURL;
-                exeProcess.Start();
-
-
-                //oneNoteApp.NavigateTo (notebook.Section.ID, notebook.Section.Page.ID);
+                if (oneNoteApp.Windows.CurrentWindow != null)
+                    oneNoteApp.NavigateTo (notebook.Section.Page.ID, "");
+                else
+                    oneNoteApp.NavigateTo (notebook.Section.Page.ID, "", true);
                 return;
                 }
             }
@@ -115,3 +104,26 @@ static void LaunchOneNote(string filter)
     }
 }
 }
+
+///Following code works, but launches the app via commandline.
+//string oneNotePath = GetOneNoteRoot() + "OneNote.exe" ;
+
+//if (string.IsNullOrEmpty(oneNotePath))
+//    return;
+
+//Process exeProcess = new Process();
+//exeProcess.StartInfo.FileName = oneNotePath;
+//exeProcess.StartInfo.UseShellExecute = false;
+//string oneNoteURL = "onenote:///\"" + notebook.Section.path +
+//                                    "\"#\"" + notebook.Section.Page.name +
+//                                    "\"&section-id=" + notebook.Section.ID +
+//                                    "&page-id=" + notebook.Section.Page.ID +
+//                                    "&end";
+
+//string hyperlink = "";
+//oneNoteApp.GetHyperlinkToObject (notebook.Section.Page.ID, "", out hyperlink);
+
+//exeProcess.StartInfo.Arguments = "/hyperlink " + hyperlink;
+
+
+//exeProcess.Start();
