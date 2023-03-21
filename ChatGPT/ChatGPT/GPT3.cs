@@ -18,7 +18,7 @@ OpenAIService openAI = null;
 public GPT3 ()
     {
     OpenAiOptions aiOptions = new OpenAiOptions();
-    aiOptions.ApiKey = "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";
+    aiOptions.ApiKey = "sk-Your Key here";
     openAI = new OpenAIService(aiOptions);
     }
 

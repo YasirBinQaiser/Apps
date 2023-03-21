@@ -12,7 +12,7 @@ namespace ChatGPT
 class GPT
 {
 
-OpenAIAPI openAI = new OpenAIAPI("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");
+OpenAIAPI openAI = new OpenAIAPI("your key here");
 public async Task<string> GetAnswer(string question)
     {
     CompletionRequest completionRequest = new CompletionRequest();
