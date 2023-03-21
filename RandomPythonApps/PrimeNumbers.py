@@ -15,7 +15,7 @@ def IsPrime (num):
     return True
     
 def WriteRandomNumbersToFile(num, min, max):
-    with open(r"d:\numbers.txt", "w") as file_handler:
+    with open(r"numbers.txt", "w") as file_handler:
         i = 0
         while i < num:
             file_handler.write (str(randint(min, max)))
@@ -25,14 +25,14 @@ def WriteRandomNumbersToFile(num, min, max):
     
     
 def ReadNumbersFromFile():
-    with open(r"d:\numbers.txt", "r") as file_handler:
+    with open(r"numbers.txt", "r") as file_handler:
         for line in file_handler:
             x1.append(int(line))
     file_handler.close()
     x1.sort()
 
 def MarkPrimeNumbersAndWriteToFile():
-    with open(r"d:\numbers.txt", "w") as file_handler:
+    with open(r"numbers.txt", "w") as file_handler:
         i = 0
         while i < len(x1):
             if IsPrime(x1[i]):
@@ -44,7 +44,7 @@ def MarkPrimeNumbersAndWriteToFile():
     file_handler.close()    
         
 def ReadMarkedNumbersFromFile():    
-    with open(r"d:\numbers.txt", "r") as file_handler:
+    with open(r"numbers.txt", "r") as file_handler:
         for line in file_handler:
             print(line[0:len(line) - 1]) # ignore end of line
     file_handler.close()
